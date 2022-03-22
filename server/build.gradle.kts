@@ -23,10 +23,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.auth0:java-jwt:3.19.0")
-    //implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    //implementation ("mysql:mysql-connector-java:8.0.28")
-    //implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.2")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.2")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-web-services")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
