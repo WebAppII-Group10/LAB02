@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.io.Encoders
 import java.util.*
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -18,6 +19,8 @@ class JWTProviderImpl : JWTProvider {
             Encoders.BASE64.encode(SECRET.encodeToByteArray())))
     @Value("\${app.config.expiration_time}")
     private lateinit var expirationTime: String
+    @Autowired
+    private lateinit var ticketService: TicketService
 
     override fun verifyToken(token: String, validityZone: Char): Boolean {
        try{
@@ -29,20 +32,25 @@ class JWTProviderImpl : JWTProvider {
            //Check for validity zone
            if(!jws.body["vz"].toString().filter{ it.isLetterOrDigit() }.contains(validityZone))
                return false
+           //mark ticket as invalid if is a valid one
+           if (!ticketService.invalidTicket(jws.body.subject.split("_")[1].toInt()))
+               return false
        }
        catch(e : JwtException){
            //exception triggered (due to inconsistency or expiration)
            return false
        }
+
         return true
     }
 
     override fun generateToken(validityZones: List<String>): String {
-        println(this.expirationTime)
+        //create a new ticket and add it into the ticket service
         return Jwts.builder() //factory builder
             .claim("vz", validityZones) //Validity zone private claim
             .setExpiration(Date(System.currentTimeMillis() + this.expirationTime.toLong())) //Exp reserved claim
             .signWith(this.key) //signing with (symmetric key)
+            .setSubject(ticketService.getNewTicketId()) //Add subject ticket
             .compact() //Return compact representation
     }
 

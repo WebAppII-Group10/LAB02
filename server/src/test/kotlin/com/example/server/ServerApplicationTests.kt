@@ -155,5 +155,34 @@ class ServerApplicationTests {
             .andReturn()
     }
 
+    @Test
+    fun verifyTicketTest_ErrorHandler5(){
+        //Perform a valid token generation
+        val tmp =  mvc.perform(MockMvcRequestBuilders.get("$ROOT_API$GENERATE_TICKET?zoneId=1")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
+        val token = tmp.response.contentAsString.split(":")[1].split('"')[1]
+        //Perform a verification for that token (just evaluate the status)
+        //Perform a verification that the same ticket cna be used once
+        //First is ok
+        mvc.perform(MockMvcRequestBuilders.post("$ROOT_API$VERIFY_TICKET")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            //set up the json content (string format, pay attention to blank chars)
+            .content("""{"token" : "$token", "zone" : "A"}"""))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andReturn()
+        //Second is forbidden
+        mvc.perform(MockMvcRequestBuilders.post("$ROOT_API$VERIFY_TICKET")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            //set up the json content (string format, pay attention to blank chars)
+            .content("""{"token" : "$token", "zone" : "A"}"""))
+            .andExpect(MockMvcResultMatchers.status().isForbidden)
+            .andReturn()
+    }
+
 
 }
