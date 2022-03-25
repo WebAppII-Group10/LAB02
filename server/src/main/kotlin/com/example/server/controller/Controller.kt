@@ -16,9 +16,47 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(ROOT_API)
 class Controller {
 
+
     @Autowired
     private lateinit var jwtProvider: JWTProviderImpl
 
+
+    /**
+     * GENERATE TICKET
+     * Generate a ticket according to the zones string passed as a parameter
+     * If the String is invalid an error is returned
+     * @return
+     *      a response entity object
+     *      200: OK - ticket is correctly generated
+     *          payload is a json composed by the token: {"token": "aaa.bbb.ccc"}
+     *      400: BAD REQUEST - an error occurs
+     *
+     */
+    @GetMapping(GENERATE_TICKET)
+    fun generateTicket(@RequestParam zoneId: Long): ResponseEntity<Any?> {
+        //Check if zone id is valid otherwise return bad request
+        if(!VALID_ZONES.containsKey(zoneId))
+            return ResponseEntity.badRequest().build()
+        //create a map to match json object
+        val responseMap = mutableMapOf<String, String>()
+        //create the token
+        responseMap["token"] = jwtProvider.generateToken(VALID_ZONES[zoneId]!!.split(" ").toList())
+        //return the response with associated data
+        return ResponseEntity.ok(responseMap)
+    }
+
+    @GetMapping(GENERATE_TICKET_NO_SUB)
+    fun generateTicketNoSub(@RequestParam zoneId: Long): ResponseEntity<Any?> {
+        //Check if zone id is valid otherwise return bad request
+        if(!VALID_ZONES.containsKey(zoneId))
+            return ResponseEntity.badRequest().build()
+        //create a map to match json object
+        val responseMap = mutableMapOf<String, String>()
+        //create the token
+        responseMap["token"] = jwtProvider.generateTokenNoSub(VALID_ZONES[zoneId]!!.split(" ").toList())
+        //return the response with associated data
+        return ResponseEntity.ok(responseMap)
+    }
 
     /**
      * VERIFY TICKET
@@ -45,29 +83,20 @@ class Controller {
         }
     }
 
-    /**
-     * GENERATE TICKET
-     * Generate a ticket according to the zones string passed as a parameter
-     * If the String is invalid an error is returned
-     * @return
-     *      a response entity object
-     *      200: OK - ticket is correctly generated
-     *          payload is a json composed by the token: {"token": "aaa.bbb.ccc"}
-     *      400: BAD REQUEST - an error occurs
-     *
-     */
-    @GetMapping(GENERATE_TICKET)
-    fun generateTicket(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-        //Check if zone id is valid otherwise return bad request
-        if(!VALID_ZONES.containsKey(zoneId))
-            return ResponseEntity.badRequest().build()
-        //create a map to match json object
-        val responseMap = mutableMapOf<String, String>()
-        //create the token
-        responseMap["token"] = jwtProvider.generateToken(VALID_ZONES[zoneId]!!.split(" ").toList())
-        //return the response with associated data
-        return ResponseEntity.ok(responseMap)
+    @PostMapping(VERIFY_TICKET_NO_SUB)
+    fun verifyTicketNoSub(@RequestBody ticket: Ticket): ResponseEntity<Any> {
+        try{
+            //verify the token
+            if (jwtProvider.verifyTokenNoSub(ticket.getToken(), ticket.getZone()))
+                return ResponseEntity.ok().build()
+            return ResponseEntity.status(403).build()
+
+        }
+        catch (e : Exception){
+            return ResponseEntity.status(403).build()
+        }
     }
+
 
 
 }

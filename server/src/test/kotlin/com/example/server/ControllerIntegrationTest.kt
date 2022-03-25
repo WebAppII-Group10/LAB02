@@ -22,9 +22,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ServerApplicationTests {
+class ControllerIntegrationTest {
 
-    //Mocked wed client
+    //Mocked web client
     @Autowired
     private lateinit var mvc: MockMvc
 
@@ -183,6 +183,5 @@ class ServerApplicationTests {
             .andExpect(MockMvcResultMatchers.status().isForbidden)
             .andReturn()
     }
-
 
 }
