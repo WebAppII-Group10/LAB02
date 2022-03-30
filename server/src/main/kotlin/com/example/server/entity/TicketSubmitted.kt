@@ -1,7 +1,6 @@
 package com.example.server.entity
 
-class Ticket(private val zone: Char, private val token: String) {
-
+class TicketSubmitted(private val zone: Char, private val token: String) {
 
     fun getZone(): Char{
         return this.zone

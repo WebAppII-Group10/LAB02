@@ -1,19 +1,17 @@
 package com.example.server.controller
 
-import com.example.server.entity.Ticket
+import com.example.server.entity.TicketSubmitted
 import com.example.server.resources.*
 import com.example.server.service.JWTProviderImpl
+import io.jsonwebtoken.JwtException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.servlet.ModelAndView
 
 @RestController
 @RequestMapping(ROOT_API)
@@ -37,28 +35,29 @@ class Controller {
      */
     @GetMapping(GENERATE_TICKET)
     fun generateTicket(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-        //Check if zone id is valid otherwise return bad request
-        if(!VALID_ZONES.containsKey(zoneId))
+        try{
+            val responseMap = mutableMapOf<String, String>()
+            responseMap["token"] = jwtProvider.generateToken(zoneId);
+            return ResponseEntity.ok(responseMap)
+        }catch(e : Exception){
             return ResponseEntity.badRequest().build()
-        //create a map to match json object
-        val responseMap = mutableMapOf<String, String>()
-        //create the token
-        responseMap["token"] = jwtProvider.generateToken(VALID_ZONES[zoneId]!!.split(" ").toList())
-        //return the response with associated data
-        return ResponseEntity.ok(responseMap)
+        } catch(e : JwtException) {
+            return ResponseEntity.status(500).build()
+        }
     }
 
     @GetMapping(GENERATE_TICKET_NO_SUB)
     fun generateTicketNoSub(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-        //Check if zone id is valid otherwise return bad request
-        if(!VALID_ZONES.containsKey(zoneId))
+
+        try{
+            val responseMap = mutableMapOf<String, String>()
+            responseMap["token"] = jwtProvider.generateTokenNoSub(zoneId);
+            return ResponseEntity.ok(responseMap)
+        }catch(e : Exception){
             return ResponseEntity.badRequest().build()
-        //create a map to match json object
-        val responseMap = mutableMapOf<String, String>()
-        //create the token
-        responseMap["token"] = jwtProvider.generateTokenNoSub(VALID_ZONES[zoneId]!!.split(" ").toList())
-        //return the response with associated data
-        return ResponseEntity.ok(responseMap)
+        } catch(e : JwtException) {
+            return ResponseEntity.status(500).build()
+        }
     }
 
     /**
@@ -73,10 +72,10 @@ class Controller {
      *
      */
     @PostMapping(VERIFY_TICKET)
-    fun verifyTicket(@RequestBody ticket: Ticket): ResponseEntity<Any> {
+    fun verifyTicket(@RequestBody ticketSubmitted: TicketSubmitted): ResponseEntity<Any> {
         try{
             //verify the token
-            if (jwtProvider.verifyToken(ticket.getToken(), ticket.getZone()))
+            if (jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone()))
                 return ResponseEntity.ok().build()
             return ResponseEntity.status(403).build()
 
@@ -87,10 +86,10 @@ class Controller {
     }
 
     @PostMapping(VERIFY_TICKET_NO_SUB)
-    fun verifyTicketNoSub(@RequestBody ticket: Ticket): ResponseEntity<Any> {
+    fun verifyTicketNoSub(@RequestBody ticketSubmitted: TicketSubmitted): ResponseEntity<Any> {
         try{
             //verify the token
-            if (jwtProvider.verifyTokenNoSub(ticket.getToken(), ticket.getZone()))
+            if (jwtProvider.verifyTokenNoSub(ticketSubmitted.getToken(), ticketSubmitted.getZone()))
                 return ResponseEntity.ok().build()
             return ResponseEntity.status(403).build()
 

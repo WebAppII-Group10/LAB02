@@ -1,6 +1,6 @@
 package com.example.server
 
-import com.example.server.entity.Ticket
+import com.example.server.entity.TicketSubmitted
 import com.example.server.resources.*
 import com.example.server.service.JWTProviderImpl
 import org.junit.jupiter.api.Assertions
@@ -30,38 +30,38 @@ class ControllerIntegrationTestRest {
     @Test
     fun generateTicket(){
         val url : String = "http://localhost:$port" + ROOT_API + GENERATE_TICKET + "?zoneId=1"
-        val response = restTemplate.getForEntity(url, Ticket::class.java)
+        val response = restTemplate.getForEntity(url, TicketSubmitted::class.java)
         assert(response.statusCode.is2xxSuccessful)
     }
 
     @Test
     fun generateTicket_ErrorHandler1(){
         val url : String = "http://localhost:$port" + ROOT_API + GENERATE_TICKET + "?zoneId=4"
-        val response = restTemplate.getForEntity(url, Ticket::class.java)
+        val response = restTemplate.getForEntity(url, TicketSubmitted::class.java)
         assert(response.statusCode == HttpStatus.BAD_REQUEST)
     }
 
     @Test
     fun generateTicket_ErrorHandler2(){
         val url : String = "http://localhost:$port" + ROOT_API + GENERATE_TICKET
-        Assertions.assertThrows(RestClientException::class.java){restTemplate.getForEntity(url, Ticket::class.java)}
+        Assertions.assertThrows(RestClientException::class.java){restTemplate.getForEntity(url, TicketSubmitted::class.java)}
     }
 
     @Test
     fun verifyTicket(){
-        val token = jwtProvider.generateToken(VALID_ZONES.get(1).toString().split(" "))
-        val ticket = Ticket('A', token)
+        val token = jwtProvider.generateToken(1)
+        val ticketSubmitted = TicketSubmitted('A', token)
         val url : String = "http://localhost:$port" + ROOT_API + VERIFY_TICKET
-        val request = HttpEntity<Ticket>(ticket)
+        val request = HttpEntity<TicketSubmitted>(ticketSubmitted)
         val response = restTemplate.postForEntity<Unit>(url, request)
         assert(response.statusCode.is2xxSuccessful)
     }
 
     @Test
     fun verifyTicket_ErrorHandler1(){
-        val ticket = Ticket('A', "AAA.BBB.CCC")
+        val ticketSubmitted = TicketSubmitted('A', "AAA.BBB.CCC")
         val url : String = "http://localhost:$port" + ROOT_API + VERIFY_TICKET
-        val request = HttpEntity<Ticket>(ticket)
+        val request = HttpEntity<TicketSubmitted>(ticketSubmitted)
         val response = restTemplate.postForEntity<Unit>(url, request)
         assert(response.statusCode == HttpStatus.FORBIDDEN)
     }
@@ -76,10 +76,10 @@ class ControllerIntegrationTestRest {
 
     @Test
     fun verifyTicket_ErrorHandler3(){
-        val token = jwtProvider.generateToken(VALID_ZONES.get(1).toString().split(" "))
-        val ticket = Ticket('A', token)
+        val token = jwtProvider.generateToken(1)
+        val ticketSubmitted = TicketSubmitted('A', token)
         val url : String = "http://localhost:$port" + ROOT_API + VERIFY_TICKET
-        val request = HttpEntity<Ticket>(ticket)
+        val request = HttpEntity<TicketSubmitted>(ticketSubmitted)
         var response = restTemplate.postForEntity<Unit>(url, request)
         assert(response.statusCode.is2xxSuccessful)
         //Recommit same ticket
