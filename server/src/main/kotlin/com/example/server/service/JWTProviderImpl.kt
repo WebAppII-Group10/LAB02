@@ -37,7 +37,7 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
        }
        catch(e : JwtException){
            //exception triggered (due to inconsistency or expiration)
-           return false
+           throw e;
        }
 
         return true
