@@ -37,7 +37,7 @@ class ControllerIntegrationTestRest_NOSUB {
 
     @Test
     fun generateTicket_ErrorHandler1(){
-        val url : String = "http://localhost:$port" + ROOT_API + GENERATE_TICKET_NO_SUB + "?zoneId=4"
+        val url : String = "http://localhost:$port$ROOT_API$GENERATE_TICKET_NO_SUB?zoneId=4"
         val response = restTemplate.getForEntity(url, TicketSubmitted::class.java)
         assert(response.statusCode == HttpStatus.BAD_REQUEST)
     }

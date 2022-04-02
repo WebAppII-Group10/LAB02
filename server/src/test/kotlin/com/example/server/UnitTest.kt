@@ -1,7 +1,6 @@
 package com.example.server
 
 import com.example.server.entity.TicketSubmitted
-import com.example.server.resources.VALID_ZONES
 import com.example.server.service.JWTProviderImpl
 import io.jsonwebtoken.JwtException
 import org.junit.jupiter.api.Assertions
@@ -72,4 +71,17 @@ class UnitTests() {
         }
     }
 
+    @Test
+    fun rejectSubmittedTicket() {
+        val token = jwtProvider.generateToken(1);
+        val ticketSubmitted = TicketSubmitted('A', token);
+        Assertions.assertTrue() {
+            jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone())
+        }
+        Assertions.assertFalse() {
+            jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone())
+        }
+    }
+
+    //TODO:Fare NO_SUB
 }
