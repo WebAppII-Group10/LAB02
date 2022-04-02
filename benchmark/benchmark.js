@@ -2,7 +2,7 @@ const loadtest = require('loadtest');
 const fs = require("fs")
 
 //Data Source for testing
-const testGetURLsOK = ["http://192.168.1.5:8080/API/generateTicket?zoneId=1",
+const testGetURLsOK = ["http://localhost:8080/API/generateTicket?zoneId=1",
     //"http://192.168.1.5:8080/API/generateTicketNoSub?zoneId=1"
 ]
 
@@ -10,7 +10,7 @@ const testPostURLsOK = ["http://192.168.1.5:8080/API/verifyTicket",
     "http://192.168.1.5:8080/API/verifyTicket",
 ]
 
-const concurrency = [32]
+const concurrency = [1, 2, 4, 6, 8, 12, 16, 24, 32]
 
 const requestNumber = 10000
 

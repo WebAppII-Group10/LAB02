@@ -1,0 +1,111 @@
+###AMD_RYZEN_5 (6 cores - 12 threads, 24 GB): localhost:8080
+************GENERATE TOKEN************
+PATH: http://localhost:8080/API/generateTicket?zoneId=1
+	Number of Threads: 32
+		Total Request:10000
+		Total Error:0
+		Total Duration:10.9257917
+		RPS:915
+		Mean Latency:34.9
+		Max Latency:355
+		Min Latency:4
+		Percentiles:{"50":32,"90":43,"95":47,"99":58}
+		Error Code:{}
+		Instance Index:8
+
+	Number of Threads: 24
+		Total Request:10000
+		Total Error:0
+		Total Duration:13.362427799999999
+		RPS:748
+		Mean Latency:32
+		Max Latency:356
+		Min Latency:8
+		Percentiles:{"50":30,"90":41,"95":46,"99":56}
+		Error Code:{}
+		Instance Index:7
+
+	Number of Threads: 16
+		Total Request:10000
+		Total Error:0
+		Total Duration:16.6243589
+		RPS:602
+		Mean Latency:26.6
+		Max Latency:362
+		Min Latency:2
+		Percentiles:{"50":26,"90":38,"95":43,"99":53}
+		Error Code:{}
+		Instance Index:6
+
+	Number of Threads: 12
+		Total Request:10000
+		Total Error:0
+		Total Duration:18.9186123
+		RPS:529
+		Mean Latency:22.7
+		Max Latency:364
+		Min Latency:2
+		Percentiles:{"50":19,"90":36,"95":41,"99":51}
+		Error Code:{}
+		Instance Index:5
+
+	Number of Threads: 8
+		Total Request:10000
+		Total Error:0
+		Total Duration:21.8154978
+		RPS:458
+		Mean Latency:17.4
+		Max Latency:364
+		Min Latency:2
+		Percentiles:{"50":13,"90":33,"95":38,"99":49}
+		Error Code:{}
+		Instance Index:4
+
+	Number of Threads: 6
+		Total Request:10000
+		Total Error:0
+		Total Duration:23.7065759
+		RPS:422
+		Mean Latency:14.2
+		Max Latency:367
+		Min Latency:2
+		Percentiles:{"50":8,"90":32,"95":36,"99":47}
+		Error Code:{}
+		Instance Index:3
+
+	Number of Threads: 4
+		Total Request:10000
+		Total Error:0
+		Total Duration:26.0503342
+		RPS:384
+		Mean Latency:10.4
+		Max Latency:365
+		Min Latency:1
+		Percentiles:{"50":5,"90":29,"95":34,"99":45}
+		Error Code:{}
+		Instance Index:2
+
+	Number of Threads: 2
+		Total Request:10000
+		Total Error:0
+		Total Duration:29.820271400000003
+		RPS:335
+		Mean Latency:6
+		Max Latency:361
+		Min Latency:1
+		Percentiles:{"50":2,"90":15,"95":29,"99":41}
+		Error Code:{}
+		Instance Index:1
+
+	Number of Threads: 1
+		Total Request:10000
+		Total Error:0
+		Total Duration:35.5662335
+		RPS:281
+		Mean Latency:3.5
+		Max Latency:369
+		Min Latency:0
+		Percentiles:{"50":1,"90":7,"95":15,"99":36}
+		Error Code:{}
+		Instance Index:0
+
