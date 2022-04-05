@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ControllerIntegrationTest_NOSUB {
+class ControllerIntegrationTestNoSub {
 
     //Mocked web client
     @Autowired

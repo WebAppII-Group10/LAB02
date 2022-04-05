@@ -29,7 +29,7 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
         //create a new ticket and add it into the ticket service
         try {
             if (!VALID_ZONES.containsKey(zoneId)) {
-                throw Exception();
+                throw Exception()
             }
             return Jwts.builder() //factory builder
                 .claim("vz", VALID_ZONES[zoneId]!!.split(" ").toList()) //Validity zone private claim
@@ -37,9 +37,9 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
                 .signWith(this.key) //signing with (symmetric key)
                 .compact()
         } catch (e: Exception) {
-            throw e;
+            throw e
         } catch (e: JwtException) {
-            throw e;
+            throw e
         }
 
     }
@@ -56,7 +56,7 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
                 return false
         } catch (e: JwtException) {
             //exception triggered (due to inconsistency or expiration)
-            return false
+            throw e
         }
 
         return true
@@ -66,7 +66,7 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
         //create a new ticket and add it into the ticket service
         try {
             if (!VALID_ZONES.containsKey(zoneId)) {
-                throw Exception();
+                throw Exception()
             }
             return Jwts.builder() //factory builder
                 .claim("vz", VALID_ZONES[zoneId]!!.split(" ").toList()) //Validity zone private claim
@@ -75,9 +75,9 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
                 .setSubject(ticketService.getNewTicketId()) //Add subject ticket
                 .compact()
         } catch (e: Exception) {
-            throw e;
+            throw e
         } catch (e: JwtException) {
-            throw e;
+            throw e
         }
 
         //Return compact representation
@@ -98,9 +98,8 @@ class JWTProviderImpl : JWTProvider, InitializingBean {
                 return false
         } catch (e: JwtException) {
             //exception triggered (due to inconsistency or expiration)
-            throw e;
+            throw e
         }
-
         return true
     }
 

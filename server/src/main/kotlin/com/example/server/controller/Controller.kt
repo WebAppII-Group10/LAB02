@@ -37,12 +37,12 @@ class Controller {
     fun generateTicket(@RequestParam zoneId: Long): ResponseEntity<Any?> {
         try{
             val responseMap = mutableMapOf<String, String>()
-            responseMap["token"] = jwtProvider.generateToken(zoneId);
+            responseMap["token"] = jwtProvider.generateToken(zoneId)
             return ResponseEntity.ok(responseMap)
-        }catch(e : Exception){
-            return ResponseEntity.badRequest().build()
-        } catch(e : JwtException) {
+        }catch(e : JwtException){
             return ResponseEntity.status(500).build()
+        } catch(e : Exception) {
+           return ResponseEntity.badRequest().build()
         }
     }
 
@@ -51,7 +51,7 @@ class Controller {
 
         try{
             val responseMap = mutableMapOf<String, String>()
-            responseMap["token"] = jwtProvider.generateTokenNoSub(zoneId);
+            responseMap["token"] = jwtProvider.generateTokenNoSub(zoneId)
             return ResponseEntity.ok(responseMap)
         }catch(e : Exception){
             return ResponseEntity.badRequest().build()
