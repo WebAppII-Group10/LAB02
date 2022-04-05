@@ -1,4 +1,4 @@
-###AMD_RYZEN_5 (6 cores - 12 threads, 24 GB): localhost:8080
+###AMD_RYZEN_5 (6 cores - 12 threads, 24 GB): localhost:8080###
 ************GENERATE TOKEN************
 PATH: http://localhost:8080/API/generateTicket?zoneId=1
 	Number of Threads: 32
