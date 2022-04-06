@@ -12,7 +12,6 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "loadtest": "^5.2.0",
-    "nodeplotlib": "^1.0.1"
+    "loadtest": "^5.2.0"
   }
 }
