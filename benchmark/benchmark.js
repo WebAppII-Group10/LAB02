@@ -3,10 +3,12 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken')
 
 //Const
-const concurrency = [8, 16, 32]
+const concurrency = [4]
 const token = jwt.sign({vz : ['A', 'B' ,'C'], exp: Math.floor(Date.now() / 1000) + (60 * 60)},'This is a very strong secret, do not share with no one!', { algorithm: 'HS384'})
 const requestNumber = 10000
 const hostURL = 'http://localhost:8080/API/verifyTicket'
+const hostURLNoSub = 'http://localhost:8080/API/verifyTicketNoSub'
+
 
 
 //parser
@@ -23,7 +25,7 @@ function loadTestExecuteVerifyTokenNoSub(){
         concurrency.forEach(conc => {
             //console.log(content)
             let obj =  {
-                url: hostURL,
+                url: hostURLNoSub,
                 maxRequests: requestNumber,
                 concurrency: conc,
                 method: 'POST',
@@ -86,6 +88,7 @@ function loadTestExecuteVerifyTokenKeepAlive(){
                 concurrency: conc,
                 method: 'POST',
                 contentType : 'application/json',
+                Connection:'Keep-alive',
                 accept: 'application/json',
                 body: {'zone' : 'A', 'token' : token}
             }
@@ -104,7 +107,39 @@ function loadTestExecuteVerifyTokenKeepAlive(){
         })
 }
 
+//Run program: verify with subject and keepalive agent
+function loadTestExecuteVerifyTokenNoSubKeepAlive(){
+    fs.writeFileSync('./verifyTicketNoSubKeepAlive_REPORT.txt', "************VERIFY TOKEN************\n")
+    concurrency.forEach(conc => {
+        //console.log(content)
+        let obj =  {
+            url: hostURLNoSub,
+            maxRequests: requestNumber,
+            concurrency: conc,
+            method: 'POST',
+            contentType : 'application/json',
+            Connection:'Keep-alive',
+            accept: 'application/json',
+            body: {'zone' : 'A', 'token' : token}
+        }
 
+        console.log(obj)
+        loadtest.loadTest(obj, function(error, result) {
+            if (error)
+            {
+                return error
+            }
+            //console.log(result.totalRequests)
+            fs.appendFileSync('./verifyTicketNoSubKeepAlive_REPORT.txt', "\tNumber of Threads: " + conc + "\n")
+            let tmp = parserOutput(result)
+            fs.appendFileSync('./verifyTicketNoSubKeepAlive_REPORT.txt', tmp + "\n")
+        })
+    })
+}
+
+//NO SUB
 //loadTestExecuteVerifyTokenNoSub()
-loadTestExecuteVerifyToken()
+loadTestExecuteVerifyTokenNoSubKeepAlive()
+//WITH SUB
+//loadTestExecuteVerifyToken()
 //loadTestExecuteVerifyTokenKeepAlive()
