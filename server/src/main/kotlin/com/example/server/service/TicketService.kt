@@ -20,6 +20,7 @@ class TicketService {
         return "$suffix${currentTicketId++}"
     }
 
+    @Synchronized
     fun invalidTicket(ticketId: Long): Boolean {
         if(this.ticketPool.containsKey(ticketId))
             if(this.ticketPool[ticketId] == true){

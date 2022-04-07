@@ -3,10 +3,13 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken')
 
 //Const
-const concurrency = [8, 16, 32]
+const concurrency = 4
 const token = jwt.sign({vz : ['A', 'B' ,'C'], exp: Math.floor(Date.now() / 1000) + (60 * 60)},'This is a very strong secret, do not share with no one!', { algorithm: 'HS384'})
+//const token = "AAA.BBB.CCC"
 const requestNumber = 10000
 const hostURL = 'http://localhost:8080/API/verifyTicket'
+const hostURLNoSub = 'http://localhost:8080/API/verifyTicketNoSub'
+
 
 
 //parser
@@ -19,92 +22,101 @@ function parserOutput(src){
 
 //Run program: verify with no sub
 function loadTestExecuteVerifyTokenNoSub(){
-    fs.writeFileSync('./verifyTicketNoSub_REPORT.txt', "************VERIFY TOKEN************\n")
-        concurrency.forEach(conc => {
-            //console.log(content)
             let obj =  {
-                url: hostURL,
+                url: hostURLNoSub,
                 maxRequests: requestNumber,
-                concurrency: conc,
+                concurrency: concurrency,
                 method: 'POST',
                 contentType : 'application/json',
                 accept: 'application/json',
                 body: {'zone' : 'A', 'token' : token}
             }
-
-            console.log(obj)
             loadtest.loadTest(obj, function(error, result) {
                 if (error)
                 {
                     return error
                 }
-                //console.log(result.totalRequests)
-                fs.appendFileSync('./verifyTicketNoSub_REPORT.txt', "\tNumber of Threads: " + conc + "\n")
                 let tmp = parserOutput(result)
                 fs.appendFileSync('./verifyTicketNoSub_REPORT.txt', tmp + "\n")
             })
-        })
 }
 
 //Run program: verify with subject
-async function loadTestExecuteVerifyToken(){
-    fs.writeFileSync('./verifyTicket_REPORT.txt', "************VERIFY TOKEN************\n")
-        for (let conc of concurrency){
-            //console.log(content)
+function loadTestExecuteVerifyToken(){
             let obj =  {
                 url: hostURL,
                 maxRequests: requestNumber,
-                concurrency: conc,
+                concurrency: concurrency,
                 method: 'POST',
                 contentType : 'application/json',
                 accept: 'application/json',
                 body: {'zone' : 'A', 'token' : token}
             }
-
-            console.log(obj)
-            await loadtest.loadTest(obj, function(error, result) {
+            loadtest.loadTest(obj, function(error, result) {
                 if (error)
                 {
                     return error
                 }
-                //console.log(result.totalRequests)
-                fs.appendFileSync('./verifyTicket_REPORT.txt', "\tNumber of Threads: " + conc + "\n")
                 let tmp = parserOutput(result)
                 fs.appendFileSync('./verifyTicket_REPORT.txt', tmp + "\n")
             })
-        }
+
 }
 
 //Run program: verify with subject and keepalive agent
 function loadTestExecuteVerifyTokenKeepAlive(){
-    fs.writeFileSync('./verifyTicketKeepAlive_REPORT.txt', "************VERIFY TOKEN************\n")
-        concurrency.forEach(conc => {
             //console.log(content)
             let obj =  {
                 url: hostURL,
                 maxRequests: requestNumber,
-                concurrency: conc,
+                concurrency: concurrency,
                 method: 'POST',
                 contentType : 'application/json',
                 accept: 'application/json',
                 body: {'zone' : 'A', 'token' : token}
             }
 
-            console.log(obj)
             loadtest.loadTest(obj, function(error, result) {
                 if (error)
                 {
                     return error
                 }
-                //console.log(result.totalRequests)
-                fs.appendFileSync('./verifyTicketKeepAlive_REPORT.txt', "\tNumber of Threads: " + conc + "\n")
                 let tmp = parserOutput(result)
                 fs.appendFileSync('./verifyTicketKeepAlive_REPORT.txt', tmp + "\n")
             })
+}
+
+function loadTestExecuteVerifyTokenNoSubKeepAlive(){
+        //console.log(content)
+        let obj =  {
+            url: hostURLNoSub,
+            maxRequests: requestNumber,
+            concurrency: concurrency,
+            method: 'POST',
+            contentType : 'application/json',
+            accept: 'application/json',
+            Connection: 'Keep-alive',
+            body: {'zone' : 'A', 'token' : token}
+        }
+        loadtest.loadTest(obj, function(error, result) {
+            if (error)
+            {
+                return error
+            }
+            let tmp = parserOutput(result)
+            fs.appendFileSync('./verifyTicketNoSubKeepAlive_REPORT.txt', tmp + "\n")
         })
 }
 
 
+
+console.log(token)
+//NO SUB
 //loadTestExecuteVerifyTokenNoSub()
-loadTestExecuteVerifyToken()
+//loadTestExecuteVerifyTokenNoSubKeepAlive()
+//WITH SUB
+//loadTestExecuteVerifyToken()
 //loadTestExecuteVerifyTokenKeepAlive()
+/**
+ * loadtest http://localhost:8080/API/verifyTicket -n 10000 -H accpet:application/json -T application/json -P '{"zone":"A", "token":"AAA.BBB.CCC"}' -c 1
+ */

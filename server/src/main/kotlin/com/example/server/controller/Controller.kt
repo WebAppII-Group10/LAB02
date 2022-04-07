@@ -48,7 +48,6 @@ class Controller {
 
     @GetMapping(GENERATE_TICKET_NO_SUB)
     fun generateTicketNoSub(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-
         try{
             val responseMap = mutableMapOf<String, String>()
             responseMap["token"] = jwtProvider.generateTokenNoSub(zoneId)
