@@ -1,4 +1,4 @@
-package com.example.server
+package com.example.server.integrationTest
 
 import com.example.server.resources.*
 import org.junit.jupiter.api.Assertions
@@ -12,6 +12,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 
+/**
+ *
+ * Controller integration test class (NoSub Version)
+ * Tests are performed by means of a mocked web client agent
+ * *** NOTE: please consult the other class for the RestTemplate test implementation ***
+ *
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 class ControllerIntegrationTestNoSub {

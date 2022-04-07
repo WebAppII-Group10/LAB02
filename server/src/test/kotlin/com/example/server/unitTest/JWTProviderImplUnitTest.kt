@@ -1,4 +1,4 @@
-package com.example.server
+package com.example.server.unitTest
 
 import com.example.server.entity.TicketSubmitted
 import com.example.server.service.JWTProviderImpl
@@ -8,12 +8,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
+/**
+ * Unit test for JWTProviderImpl(Standard version)
+ */
 @SpringBootTest
-class UnitTest() {
+class JWTProviderImplUnitTest() {
 
     @Autowired
     lateinit var jwtProvider : JWTProviderImpl
 
+    //generate ticket correctly
     @Test
     fun generateToken() {
         Assertions.assertDoesNotThrow() {
@@ -21,6 +25,7 @@ class UnitTest() {
         }
     }
 
+    //generate ticket with invalid zone
     @Test
     fun generateInvalidZonesToken() {
         Assertions.assertThrows(Exception::class.java) {
@@ -29,6 +34,7 @@ class UnitTest() {
         }
     }
 
+    //reject wrong ticket
     @Test
     fun acceptValidToken() {
         val token = jwtProvider.generateToken(1)
@@ -44,7 +50,7 @@ class UnitTest() {
             jwtProvider.verifyToken("aaa.bbb.ccc", '1')
         }
     }
-
+    //accept single time the a valid ticket
     @Test
     fun acceptValidTicket() {
         val token = jwtProvider.generateToken(1)
@@ -54,6 +60,7 @@ class UnitTest() {
         }
     }
 
+    //reject expired ticket (token is previously generated)
     @Test
     fun rejectExpiredTicket() {
         val expiredToken = "eyJhbGciOiJIUzM4NCJ9.eyJ2eiI6WyJBIiwiQiIsIkMiXSwiZXhwIjoxNjQ4NjU4NjQ1LCJzdWIiOiJUSUNLRVRfMSJ9.8KMfp6-R8pyGClg3X0DPVZHs2OFz99ykyqRhD0WlQo4oOX0NoZhPeJJjZLVrW_8g"
@@ -62,6 +69,7 @@ class UnitTest() {
         }
     }
 
+    //reject ticket (due to invalid zone)
     @Test
     fun rejectInvalidZoneTicket() {
         val token = jwtProvider.generateToken(1)
@@ -71,17 +79,20 @@ class UnitTest() {
         }
     }
 
+    //reject already used ticket
     @Test
     fun rejectSubmittedTicket() {
+        //generate token
         val token = jwtProvider.generateToken(1)
         val ticketSubmitted = TicketSubmitted('A', token)
+        //valid ticket: correctly committed
         Assertions.assertTrue() {
             jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone())
         }
+        //valid again: not permitted
         Assertions.assertFalse() {
             jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone())
         }
     }
 
-    //TODO:Fare NO_SUB
 }

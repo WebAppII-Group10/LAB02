@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(ROOT_API)
 class Controller {
 
-
     @Autowired
     private lateinit var jwtProvider: JWTProviderImpl
 
@@ -35,26 +34,27 @@ class Controller {
      */
     @GetMapping(GENERATE_TICKET)
     fun generateTicket(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-        try{
+        try {
             val responseMap = mutableMapOf<String, String>()
             responseMap["token"] = jwtProvider.generateToken(zoneId)
             return ResponseEntity.ok(responseMap)
-        }catch(e : JwtException){
+        } catch (e: JwtException) {
             return ResponseEntity.status(500).build()
-        } catch(e : Exception) {
-           return ResponseEntity.badRequest().build()
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().build()
         }
     }
 
+    //Same route without subject field processing
     @GetMapping(GENERATE_TICKET_NO_SUB)
     fun generateTicketNoSub(@RequestParam zoneId: Long): ResponseEntity<Any?> {
-        try{
+        try {
             val responseMap = mutableMapOf<String, String>()
             responseMap["token"] = jwtProvider.generateTokenNoSub(zoneId)
             return ResponseEntity.ok(responseMap)
-        }catch(e : Exception){
+        } catch (e: Exception) {
             return ResponseEntity.badRequest().build()
-        } catch(e : JwtException) {
+        } catch (e: JwtException) {
             return ResponseEntity.status(500).build()
         }
     }
@@ -72,32 +72,30 @@ class Controller {
      */
     @PostMapping(VERIFY_TICKET)
     fun verifyTicket(@RequestBody ticketSubmitted: TicketSubmitted): ResponseEntity<Any> {
-        try{
+        try {
             //verify the token
             if (jwtProvider.verifyToken(ticketSubmitted.getToken(), ticketSubmitted.getZone()))
                 return ResponseEntity.ok().build()
             return ResponseEntity.status(403).build()
 
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             return ResponseEntity.status(403).build()
         }
     }
 
+    //same route without subject field processing
     @PostMapping(VERIFY_TICKET_NO_SUB)
     fun verifyTicketNoSub(@RequestBody ticketSubmitted: TicketSubmitted): ResponseEntity<Any> {
-        try{
+        try {
             //verify the token
             if (jwtProvider.verifyTokenNoSub(ticketSubmitted.getToken(), ticketSubmitted.getZone()))
                 return ResponseEntity.ok().build()
             return ResponseEntity.status(403).build()
 
-        }
-        catch (e : Exception){
+        } catch (e: Exception) {
             return ResponseEntity.status(403).build()
         }
     }
-
 
 
 }

@@ -1,5 +1,8 @@
 package com.example.server.resources
 
+/**
+ * Constant file for APIs path
+ */
 //HOME APIs
 const val ROOT_API = "/API"
 

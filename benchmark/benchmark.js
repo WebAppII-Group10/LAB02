@@ -111,12 +111,17 @@ function loadTestExecuteVerifyTokenNoSubKeepAlive(){
 
 
 console.log(token)
-//NO SUB
+/**
+ * NO SUB
+ */
 //loadTestExecuteVerifyTokenNoSub()
 //loadTestExecuteVerifyTokenNoSubKeepAlive()
-//WITH SUB
+/**
+ * STANDARD
+ */
 //loadTestExecuteVerifyToken()
 //loadTestExecuteVerifyTokenKeepAlive()
 /**
+ * Command Line
  * loadtest http://localhost:8080/API/verifyTicket -n 10000 -H accpet:application/json -T application/json -P '{"zone":"A", "token":"AAA.BBB.CCC"}' -c 1
  */

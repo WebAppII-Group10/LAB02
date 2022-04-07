@@ -1,5 +1,9 @@
 package com.example.server.service
-
+/**
+ * JWT provider interface provides the following methods:
+ * - generateToken (both with and without subject version)
+ * - verifyToken (both with and without subject version)
+ */
 interface JWTProvider {
 
     fun generateTokenNoSub(zoneId : Long): String
