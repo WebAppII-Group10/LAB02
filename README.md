@@ -10,9 +10,9 @@
   
 # Web application II group10
 Members:
- - Riccardo Gracis (s287961)
+ - Riccardo Gracis (S287961)
  - Alessia Messina (s)
- - Alessandro De (s)
+ - Alessandro  (s)
  - Erasmo (s)
 
 # Introduction
