@@ -73,6 +73,7 @@ function loadTestExecuteVerifyTokenKeepAlive(){
                 method: 'POST',
                 contentType : 'application/json',
                 accept: 'application/json',
+                Connection: 'Keep-alive',
                 body: {'zone' : 'A', 'token' : token}
             }
 
