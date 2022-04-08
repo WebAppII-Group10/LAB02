@@ -6,6 +6,7 @@
 - [Benchmark instructions](#benchmark-instructions)
   - [Install benchmark dependencies](#install-benchmark-dependencies)
   - [Run benchmark application](#run-benchmark-application)
+- [Scalability evaluation](#scalability-evaluation)
   
 # Web application II group10
 Members:
@@ -38,4 +39,7 @@ Alternatively is convinent to use the CL functionalities provide by the loadtest
   - ```loadtest <http://url> -n 1000 -c 4 -T application/json -H accept:application/json -P '{"key" : "value"}'```
 
 For more information visit the offical loadtes npm page: https://www.npmjs.com/package/loadtest
+
+# Scalability evaluation
+Based on the data collected by the benchmark apporach discussed before, we have generated a report using the usl4j library in order to evaluate the system behavior in a real web environment. The report consderations are stored in the ```/benchmark/USL_report.pdf file```. 
  
